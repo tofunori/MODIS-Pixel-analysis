@@ -1,0 +1,42 @@
+{
+  "dataset_info": {
+    "n_years": 15,
+    "start_year": 2010,
+    "end_year": 2024,
+    "total_pixels": 65762,
+    "analysis_date": "2025-06-24 16:30:24"
+  },
+  "key_findings": {
+    "descriptive": {
+      "mean_albedo": 0.538,
+      "trend_magnitude": -0.0369,
+      "variability_cv": 0.0764,
+      "distribution_shape": "Skewed"
+    },
+    "trend": {
+      "theil_sen_slope": -0.005898,
+      "total_change": -0.0826,
+      "bootstrap_slope_ci": [
+        -0.01048,
+        -0.002707
+      ]
+    },
+    "persistence": {
+      "hurst_exponent": 0.707,
+      "persistence_type": "Persistent (trending)",
+      "lag1_autocorr": 0.413
+    }
+  },
+  "statistical_tests": {
+    "trend_significance": {
+      "linear_regression_p": 0.003077,
+      "spearman_p": 0.00419,
+      "kendall_p": 0.00827,
+      "change_points_detected": 3
+    }
+  },
+  "recommendations": [
+    "Use non-parametric statistical tests (data not normally distributed)",
+    "Significant decreasing trend confirmed by robust methods"
+  ]
+}

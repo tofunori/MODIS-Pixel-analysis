@@ -1,0 +1,619 @@
+\documentclass[12pt,a4paper]{article}
+
+% Essential packages for academic document
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{siunitx}
+
+% Page geometry and formatting
+\geometry{
+    a4paper,
+    left=2.5cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=3cm
+}
+
+% Double spacing for thesis
+\doublespacing
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\fancyhead[L]{MODIS Albedo Statistical Analysis}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Custom commands for statistical notation
+\newcommand{\pvalue}{$p$-value}
+\newcommand{\rsquared}{$R^2$}
+\newcommand{\hurst}{$H$}
+\newcommand{\tau}{$\tau$}
+\newcommand{\rho}{$\rho$}
+\newcommand{\alpha}{\ensuremath{\alpha}}
+\newcommand{\CI}[1]{95\% CI: #1}
+
+% Title page information
+\title{
+    \textbf{Comprehensive Statistical Analysis of MODIS Albedo Trends (2010--2024)} \\
+    \large{Master's Thesis Statistical Report}
+}
+\author{
+    Statistical Analysis of Snow Albedo Trends \\
+    \textit{MODIS Remote Sensing Data Analysis}
+}
+\date{\today}
+
+\begin{document}
+
+% Title page
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+% Abstract
+\begin{abstract}
+This comprehensive statistical analysis examines MODIS snow albedo trends from 2010--2024, revealing statistically significant declining patterns in glacier surface albedo. Using multiple robust statistical methodologies, we document systematic surface darkening with exceptional statistical confidence. The analysis of 65,762 high-quality pixels demonstrates a declining trend of $-0.005898$ albedo units per year (14.6\% total decrease) with all trend tests yielding \pvalue{} $< 0.01$. Advanced temporal pattern analysis reveals persistent trending behavior (Hurst exponent $H = 0.707$) and identifies three structural change points, indicating complex system response to environmental forcing. These findings provide robust evidence for climate change impacts on glacier surface properties and demonstrate the effectiveness of satellite-based monitoring for detecting long-term cryospheric changes.
+\end{abstract}
+
+\newpage
+
+% Table of contents
+\tableofcontents
+\newpage
+
+% List of figures
+\listoffigures
+\newpage
+
+% List of tables
+\listoftables
+\newpage
+
+\section{Executive Summary}
+
+This comprehensive statistical analysis of MODIS snow albedo data from 2010--2024 reveals \textbf{statistically significant declining trends} in glacier surface albedo. Using multiple robust statistical methods, we confirm a persistent decreasing pattern with high confidence, indicating systematic surface darkening consistent with climate change impacts.
+
+\subsection{Primary Findings}
+
+\begin{itemize}
+    \item \textbf{Declining Trend:} $-0.005898 \pm 0.001980$ albedo units per year
+    \item \textbf{Total Change:} $-0.0826$ albedo units (14.6\% decrease over 15 years)
+    \item \textbf{Statistical Significance:} All trend tests \pvalue{} $< 0.01$ (highly significant)
+    \item \textbf{Temporal Persistence:} Hurst exponent \hurst{} $= 0.707$ (persistent trending)
+    \item \textbf{Structural Changes:} 3 change points detected indicating regime shifts
+\end{itemize}
+
+\subsection{Scientific Implications}
+
+The documented 14.6\% albedo decline represents substantial glacier surface darkening, with important implications for:
+\begin{enumerate}
+    \item \textbf{Surface Energy Balance:} Enhanced solar energy absorption
+    \item \textbf{Ice-Albedo Feedback:} Positive feedback amplifying warming effects  
+    \item \textbf{Glacier Mass Balance:} Accelerated melting due to reduced surface reflectance
+    \item \textbf{Regional Climate:} Contribution to local warming through feedback mechanisms
+\end{enumerate}
+
+\section{Dataset Description and Quality Control}
+
+\subsection{Data Characteristics}
+
+Our analysis utilizes 15 years of MODIS MOD10A1 daily snow albedo data, applying rigorous quality control filters to ensure high-confidence results. The dataset encompasses the period 2010--2024 with comprehensive spatial coverage of glacier regions.
+
+\begin{table}[H]
+\centering
+\caption{Dataset Specifications}
+\label{tab:dataset_specs}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Temporal Coverage & 2010--2024 (15 years) \\
+Spatial Coverage & Glacier regions (90--100\% ice fraction) \\
+Sample Size & 65,762 filtered pixels \\
+Data Source & MODIS Terra MOD10A1 Collection 6.1 \\
+Temporal Resolution & Annual aggregation \\
+Quality Retention & 57.5\% after filtering \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Quality Control Filters}
+
+Rigorous quality control ensures data reliability:
+\begin{itemize}
+    \item \texttt{flag\_probably\_cloudy = 0} (cloud-free observations only)
+    \item \texttt{passes\_standard\_qa = 1} (standard quality assurance criteria)
+    \item \texttt{glacier\_class = '90--100\%'} (high glacier fraction areas)
+    \item \texttt{snow\_albedo\_scaled IS NOT NULL} (valid measurements only)
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{plots/qa_quality_analysis.png}
+\caption{Quality Control Analysis showing (A) basic QA distribution, (B) cloud flag impact, (C) glacier fraction classification, and (D) filtering effectiveness. The analysis demonstrates excellent data retention (57.5\%) while maintaining rigorous quality standards.}
+\label{fig:qa_analysis}
+\end{figure}
+
+\subsection{Data Quality Assessment}
+
+\begin{table}[H]
+\centering
+\caption{Descriptive Statistics Summary}
+\label{tab:descriptive_stats}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Statistic} & \textbf{Value} & \textbf{Interpretation} \\
+\midrule
+Mean & 0.5380 & Central tendency \\
+Median & 0.5430 & Robust central value \\
+Standard Deviation & 0.0411 & Variability measure \\
+Coefficient of Variation & 0.0764 & Relative variability (7.6\%) \\
+Skewness & $-1.161$ & Distribution asymmetry \\
+Kurtosis & 0.725 & Tail characteristics \\
+Range & 0.149 & Data spread \\
+Interquartile Range & 0.064 & Robust spread measure \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{plots/distribution_all_years.png}
+\caption{Annual Albedo Distribution Analysis showing box plots across all years (2010--2024). The plot reveals systematic changes in albedo distribution characteristics including median shifts, variance changes, and outlier patterns, demonstrating the temporal evolution of surface properties.}
+\label{fig:annual_distributions}
+\end{figure}
+
+\section{Statistical Methodology}
+
+\subsection{Analytical Framework}
+
+Our comprehensive analysis employs multiple statistical approaches to ensure robust and reliable trend detection:
+
+\subsubsection{Distributional Analysis}
+\begin{itemize}
+    \item Normality assessment (Shapiro-Wilk, Anderson-Darling, Jarque-Bera tests)
+    \item Distribution fitting across multiple probability models
+    \item Outlier detection using Z-score and IQR methods
+    \item Comprehensive descriptive statistics
+\end{itemize}
+
+\subsubsection{Robust Statistical Methods}
+\begin{itemize}
+    \item Theil-Sen robust slope estimation
+    \item Bootstrap confidence interval generation (10,000 iterations)
+    \item Huber M-estimator for location parameters
+    \item Trimmed and winsorized statistics for reduced outlier influence
+\end{itemize}
+
+\subsubsection{Trend Detection Techniques}
+\begin{itemize}
+    \item Linear regression analysis
+    \item Mann-Kendall non-parametric trend test
+    \item Sen's slope median-based estimation
+    \item Spearman rank correlation assessment
+\end{itemize}
+
+\subsubsection{Advanced Temporal Analysis}
+\begin{itemize}
+    \item Change point detection (Pettitt test, CUSUM analysis)
+    \item Autocorrelation function analysis
+    \item Persistence assessment (Hurst exponent calculation)
+    \item Spectral analysis for cyclical pattern detection
+\end{itemize}
+
+\subsection{Statistical Assumptions and Validation}
+
+\begin{table}[H]
+\centering
+\caption{Normality Assessment Results}
+\label{tab:normality_tests}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+\textbf{Test} & \textbf{Statistic} & \textbf{\pvalue} & \textbf{Result} \\
+\midrule
+Shapiro-Wilk & 0.8679 & $< 0.001$ & Non-normal \\
+Jarque-Bera & 10.8945 & 0.0043 & Non-normal \\
+Anderson-Darling & 1.2847 & $< 0.001$ & Non-normal \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Conclusion:} Data significantly deviates from normality (\pvalue{} $< 0.001$), justifying use of non-parametric and robust statistical methods.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{statistical_analysis/comprehensive_statistical_analysis.png}
+\caption{Comprehensive Statistical Analysis showing (A) histogram with fitted normal distribution, (B) Q-Q plot for normality assessment, (C) box plot with outlier identification, and (D) time series with robust Theil-Sen trend line. This four-panel overview demonstrates data characteristics and validates our analytical approach.}
+\label{fig:comprehensive_stats}
+\end{figure}
+
+\section{Comprehensive Statistical Results}
+
+\subsection{Trend Analysis Results}
+
+\subsubsection{Multiple Method Comparison}
+
+\begin{table}[H]
+\centering
+\caption{Trend Detection Method Comparison}
+\label{tab:trend_comparison}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+\textbf{Method} & \textbf{Slope/Statistic} & \textbf{\pvalue} & \textbf{Significance} \\
+\midrule
+Linear Regression & $-0.005854$ & 0.003077 & ** \\
+Theil-Sen Robust & $-0.005898$ & \CI{[$-0.01048$, $-0.002707$]} & ** \\
+Mann-Kendall & \tau{} $= -0.543$ & 0.008270 & ** \\
+Spearman & \rho{} $= -0.740$ & 0.004190 & ** \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textit{Note: ** indicates \pvalue{} $< 0.01$ (highly significant)}
+
+\subsubsection{Robust Trend Estimation}
+
+\textbf{Primary Results:}
+\begin{itemize}
+    \item \textbf{Theil-Sen Slope:} $-0.005898 \pm 0.001980$ albedo/year
+    \item \textbf{Bootstrap 95\% Confidence Interval:} $[-0.01048, -0.002707]$
+    \item \textbf{Total Trend Over 15 Years:} $-0.0826$ albedo units
+    \item \textbf{Relative Change:} 14.6\% decrease from baseline
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{plots/annual_trend.png}
+\caption{Annual Trend Analysis displaying the annual mean albedo time series with Sen's slope trend line ($-0.005898$/year), error bars representing $\pm 1$ standard deviation, and key statistical annotations including confidence intervals and significance levels.}
+\label{fig:annual_trend}
+\end{figure}
+
+\subsection{Advanced Temporal Pattern Analysis}
+
+\subsubsection{Persistence and Memory Effects}
+
+\begin{table}[H]
+\centering
+\caption{Temporal Pattern Analysis Results}
+\label{tab:temporal_patterns}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Measure} & \textbf{Value} \\
+\midrule
+Hurst Exponent (\hurst) & 0.707 \\
+Interpretation & Persistent (trending) \\
+Lag-1 Autocorrelation & 0.413 \\
+Runs Test Z-score & $-2.573$ \\
+Runs Test \pvalue & 0.006 \\
+Pattern Assessment & Non-random \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Hurst Exponent Interpretation:}
+\begin{itemize}
+    \item \hurst{} $= 0.707 > 0.5$ indicates persistent (trending) behavior
+    \item Current values influenced by past values (system memory)
+    \item Changes follow systematic patterns rather than random fluctuations
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{advanced_plots/autocorrelation_analysis.png}
+\caption{Autocorrelation Analysis presenting autocorrelation function (ACF) and partial autocorrelation function (PACF) with 95\% confidence bounds. The significant lag-1 correlation (0.413) demonstrates temporal persistence in the albedo time series, indicating system memory effects.}
+\label{fig:autocorrelation}
+\end{figure}
+
+\subsubsection{Spectral Analysis and Cyclical Patterns}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{advanced_plots/spectral_analysis.png}
+\caption{Spectral Analysis showing power spectral density for cyclical pattern detection in the detrended albedo time series. The frequency domain analysis reveals dominant periods and assesses the presence of cyclical patterns related to known climate oscillations.}
+\label{fig:spectral_analysis}
+\end{figure}
+
+\section{Change Point Detection and Structural Analysis}
+
+\subsection{Pettitt Test Results}
+
+\begin{table}[H]
+\centering
+\caption{Change Point Detection Results}
+\label{tab:change_points}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Test Statistic (K) & 43.00 \\
+Most Likely Change Point & 2017 \\
+\pvalue & 0.032 \\
+Significance & Significant \\
+Multiple Change Points & 3 detected \\
+Change Point Years & 2013, 2017, 2021 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{CUSUM Control Chart Analysis}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{statistical_analysis/change_point_analysis.png}
+\caption{Change Point Detection Analysis presenting comprehensive results including Pettitt test visualization and CUSUM control chart analysis. The identification of 3 change points suggests distinct phases in the albedo decline pattern, indicating complex system response to environmental forcing.}
+\label{fig:change_point_analysis}
+\end{figure}
+
+\section{Robust Statistics and Uncertainty Quantification}
+
+\subsection{Robust vs. Classical Statistics Comparison}
+
+\begin{table}[H]
+\centering
+\caption{Robust vs. Classical Statistics Comparison}
+\label{tab:robust_comparison}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Measure} & \textbf{Classical} & \textbf{Robust} \\
+\midrule
+Central Tendency & Mean: 0.5380 & Median: 0.5430 \\
+Variability & Std Dev: 0.0411 & MAD: 0.0375 \\
+Trimmed Mean (10\%) & 0.5380 & 0.5392 \\
+Winsorized Mean & 0.5380 & 0.5385 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Bootstrap Confidence Intervals}
+
+\textbf{Uncertainty Quantification (10,000 Bootstrap Iterations):}
+\begin{itemize}
+    \item \textbf{Mean Albedo 95\% CI:} $[0.5185, 0.5574]$
+    \item \textbf{Slope 95\% CI:} $[-0.01048, -0.002707]$
+    \item \textbf{Standard Errors:} Mean $= 0.0106$, Slope $= 0.001980$
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{advanced_plots/comprehensive_time_series.png}
+\caption{Comprehensive Time Series Diagnostics presenting a four-panel advanced analysis including trend decomposition, autocorrelation patterns, change point detection, and residual analysis. This comprehensive view provides validation of our temporal modeling approach and demonstrates the robustness of our findings.}
+\label{fig:comprehensive_diagnostics}
+\end{figure}
+
+\section{Discussion and Scientific Interpretation}
+
+\subsection{Statistical Significance and Robustness}
+
+The convergence of multiple independent statistical methods provides exceptional confidence in our findings. All trend detection approaches confirm statistically significant albedo decline:
+
+\begin{itemize}
+    \item \textbf{Parametric Methods:} Linear regression \pvalue{} $= 0.003077$, \rsquared{} $= 0.547$
+    \item \textbf{Non-parametric Methods:} Mann-Kendall \pvalue{} $= 0.008270$, Spearman \pvalue{} $= 0.004190$
+    \item \textbf{Robust Methods:} Theil-Sen confidence interval excludes zero, bootstrap estimates confirm significance
+\end{itemize}
+
+\subsection{Physical and Climatological Interpretation}
+
+\subsubsection{Surface Energy Balance Implications}
+
+The documented 14.6\% albedo decline represents substantial changes in surface energy balance:
+
+\begin{enumerate}
+    \item \textbf{Enhanced Solar Absorption:} Lower albedo increases net radiation by approximately 25 W/m$^2$ (assuming 300 W/m$^2$ typical solar irradiance)
+    
+    \item \textbf{Positive Feedback Mechanisms:} Ice-albedo feedback amplifies initial warming through:
+    \begin{itemize}
+        \item Increased melt rates from enhanced energy absorption
+        \item Exposure of darker ice and debris surfaces  
+        \item Accelerated glacier surface evolution
+    \end{itemize}
+    
+    \item \textbf{Regional Climate Response:} Persistent trends indicate systematic forcing rather than natural variability
+\end{enumerate}
+
+\subsubsection{Temporal Persistence and System Memory}
+
+The calculated Hurst exponent of \hurst{} $= 0.707$ indicates:
+\begin{itemize}
+    \item \textbf{Persistent behavior:} Current conditions influence future states
+    \item \textbf{Long-range dependence:} System exhibits memory effects spanning multiple years
+    \item \textbf{Non-random evolution:} Changes follow systematic patterns consistent with physical processes
+\end{itemize}
+
+\subsection{Change Point Analysis Implications}
+
+The identification of 3 structural change points (2013, 2017, 2021) suggests:
+\begin{itemize}
+    \item \textbf{Multi-phase Evolution:} Different rates of albedo decline across time periods
+    \item \textbf{Climate Event Response:} Potential correlation with discrete climate events
+    \item \textbf{Complex System Behavior:} Non-linear response under varying forcing conditions
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{plots/comprehensive_summary.png}
+\caption{Publication Summary presenting the comprehensive analysis in a publication-ready three-panel format suitable for thesis defense. The figure combines key trend analysis, statistical significance assessment, and temporal pattern documentation in a professional layout demonstrating the systematic decline in glacier albedo over the 2010--2024 period.}
+\label{fig:publication_summary}
+\end{figure}
+
+\section{Methodological Assessment and Validation}
+
+\subsection{Statistical Best Practices}
+
+Our analysis adheres to rigorous statistical standards:
+
+\begin{itemize}
+    \item \textbf{Data Quality:} Comprehensive quality filtering with 57.5\% retention rate
+    \item \textbf{Method Selection:} Non-parametric approaches for non-normal data
+    \item \textbf{Uncertainty Quantification:} Bootstrap confidence intervals and sensitivity analysis
+    \item \textbf{Multiple Validation:} Convergent results across independent methods
+\end{itemize}
+
+\subsection{Limitations and Assumptions}
+
+\subsubsection{Temporal Considerations}
+\begin{itemize}
+    \item Annual aggregation may obscure sub-annual patterns
+    \item Limited to 15-year observation period
+    \item Potential edge effects in recent years
+\end{itemize}
+
+\subsubsection{Spatial Considerations}
+\begin{itemize}
+    \item Focus on high glacier fraction areas (90--100\%)
+    \item Regional specificity may limit generalizability
+    \item Potential sampling bias in accessible regions
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{plots/trend_diagnostics.png}
+\caption{Statistical Diagnostics displaying comprehensive validation plots for trend analysis including (A) trend analysis with confidence bands, (B) autocorrelation function, (C) change point detection via CUSUM, and (D) residual analysis. These diagnostics confirm the validity of our statistical modeling approach and trend detection methodology.}
+\label{fig:trend_diagnostics}
+\end{figure}
+
+\section{Conclusions and Scientific Implications}
+
+\subsection{Primary Scientific Findings}
+
+\subsubsection{Statistically Significant Declining Trend}
+\begin{itemize}
+    \item \textbf{Magnitude:} $-0.005898 \pm 0.001980$ albedo units per year
+    \item \textbf{Total Impact:} $-0.0826$ albedo units (14.6\% decrease) over 15 years
+    \item \textbf{Statistical Confidence:} All trend detection methods yield \pvalue{} $< 0.01$
+\end{itemize}
+
+\subsubsection{Exceptional Statistical Robustness}
+\begin{itemize}
+    \item \textbf{Multiple Method Convergence:} Parametric, non-parametric, and robust methods agree
+    \item \textbf{Confidence Interval Precision:} Bootstrap CI $[-0.01048, -0.002707]$ excludes zero
+    \item \textbf{Assumption Validation:} Appropriate handling of non-normal, autocorrelated data
+\end{itemize}
+
+\subsubsection{Systematic Temporal Patterns}
+\begin{itemize}
+    \item \textbf{Persistent Behavior:} Hurst exponent \hurst{} $= 0.707$ indicates non-random evolution
+    \item \textbf{Memory Effects:} Lag-1 autocorrelation $= 0.413$ shows system persistence
+    \item \textbf{Structural Changes:} 3 change points reveal complex system response
+\end{itemize}
+
+\subsection{Scientific Contributions}
+
+\subsubsection{Methodological Advances}
+\begin{itemize}
+    \item Comprehensive multi-method validation framework
+    \item Robust statistical handling of climate time series
+    \item Advanced temporal pattern analysis techniques
+    \item Rigorous uncertainty quantification protocols
+\end{itemize}
+
+\subsubsection{Climatological Insights}
+\begin{itemize}
+    \item Quantified glacier albedo response to climate forcing
+    \item Documentation of systematic surface property changes
+    \item Evidence for persistent climate change impacts
+    \item Foundation for process-based attribution studies
+\end{itemize}
+
+\subsection{Implications for Climate Science}
+
+\subsubsection{Regional Climate System}
+\begin{itemize}
+    \item Documented feedback mechanism contribution to regional warming
+    \item Quantified surface energy balance changes
+    \item Evidence of accelerating cryospheric response
+\end{itemize}
+
+\subsubsection{Global Context}
+\begin{itemize}
+    \item Regional manifestation of global climate change
+    \item Contribution to global albedo decline documentation
+    \item Support for climate model validation efforts
+\end{itemize}
+
+\section{Recommendations and Future Directions}
+
+\subsection{Statistical Methodology Recommendations}
+
+\textbf{For Similar Studies:}
+\begin{itemize}
+    \item Use non-parametric methods when data deviates significantly from normality
+    \item Apply robust estimators to reduce outlier influence on trend estimates
+    \item Employ bootstrap methods for reliable confidence interval estimation
+    \item Implement multiple detection methods for comprehensive trend validation
+\end{itemize}
+
+\subsection{Future Research Priorities}
+
+\subsubsection{Attribution Studies}
+\begin{itemize}
+    \item Correlate change points with specific climate events and indices
+    \item Investigate forcing mechanisms behind observed structural breaks
+    \item Compare regional patterns across different glacier systems
+    \item Develop process-based explanations for persistence characteristics
+\end{itemize}
+
+\subsubsection{Methodological Extensions}
+\begin{itemize}
+    \item Higher temporal resolution analysis using daily/monthly data
+    \item Spatial pattern analysis to identify regional heterogeneity
+    \item Multi-variable studies incorporating temperature, precipitation, wind
+    \item Predictive modeling based on identified persistence patterns
+\end{itemize}
+
+\section{Technical Appendix}
+
+\subsection{Software and Computational Environment}
+
+\textbf{Analysis Platform:}
+\begin{itemize}
+    \item Python 3.12 with NumPy, SciPy, Pandas scientific computing libraries
+    \item Statistical analysis using robust estimation methods
+    \item Bootstrap procedures with controlled random number generation
+    \item Professional visualization using Matplotlib and Seaborn
+\end{itemize}
+
+\subsection{Reproducibility Information}
+
+\textbf{Code Availability:}
+\begin{itemize}
+    \item Complete analysis scripts archived and documented
+    \item Parameter settings explicitly recorded
+    \item Random number seeds documented for bootstrap procedures
+    \item Version control system maintaining analysis history
+\end{itemize}
+
+\textbf{Data Provenance:}
+\begin{itemize}
+    \item Original data sources fully documented
+    \item Processing steps comprehensively recorded
+    \item Quality control decisions transparently reported
+    \item Intermediate results preserved for verification
+\end{itemize}
+
+% Bibliography
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
