@@ -1,0 +1,14 @@
+Metric,Value
+Sen's Slope,-0.005897682077977018
+Sen's Slope CI Lower,-0.011038206441767612
+Sen's Slope CI Upper,-0.001928279864385009
+Kendall's Tau,-0.5047619047619047
+Mann-Kendall P-value,0.010072435153279713
+S Statistic,-53.0
+Z Statistic,-2.573332628388046
+Overall Mean Albedo,0.5379995609073581
+First Year Mean,0.5749063291139215
+Last Year Mean,0.482338373876834
+Total Change,-0.0925679552370875
+Trend Direction,Decreasing
+Significance Level,* (p < 0.05)
