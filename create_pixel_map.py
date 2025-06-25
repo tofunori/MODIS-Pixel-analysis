@@ -89,13 +89,13 @@ def create_pixel_map(df):
             tooltip=f"Pixel {row['pixel_id']}"
         ).add_to(m)
         
-        # Add text label for pixel ID (smaller font for readability)
+        # Add text label with full pixel ID (smaller font for readability)
         folium.Marker(
             location=[row['latitude'], row['longitude']],
             icon=folium.DivIcon(
-                html=f'<div style="font-size: 8px; color: black; font-weight: bold; text-shadow: 1px 1px 1px white;">{row["pixel_id"].split("_")[-1]}</div>',
-                icon_size=(30, 10),
-                icon_anchor=(15, 5)
+                html=f'<div style="font-size: 7px; color: black; font-weight: bold; text-shadow: 1px 1px 1px white; text-align: center;">{row["pixel_id"]}</div>',
+                icon_size=(50, 12),
+                icon_anchor=(25, 6)
             )
         ).add_to(m)
     
@@ -108,7 +108,7 @@ def create_pixel_map(df):
     <h4>MODIS Pixels</h4>
     <p><b>Total Pixels:</b> {}</p>
     <p><b>Colors:</b> By pixel row</p>
-    <p><b>Labels:</b> Last part of pixel ID</p>
+    <p><b>Labels:</b> Full pixel ID</p>
     <p><b>Click markers for details</b></p>
     </div>
     '''.format(len(df))
