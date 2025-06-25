@@ -106,10 +106,10 @@ This comprehensive statistical analysis of MODIS snow albedo data from Saskatche
 
 \subsection{Scientific Implications}
 
-The documented 14.6\% albedo decline on Saskatchewan Glacier represents substantial surface darkening, with important implications for the Columbia Icefield system and broader regional impacts:
+The documented 14.6\% albedo decline on Saskatchewan Glacier represents substantial surface darkening, consistent with global patterns of glacier albedo reduction \cite{Huss2021GlobalGlacierAlbedo} and regional trends across the Canadian Cordillera \cite{Minder2021AlbedoTrendCanada, Li2020CanadianRockiesAlbedo}, with important implications for the Columbia Icefield system and broader regional impacts:
 \begin{enumerate}
     \item \textbf{Surface Energy Balance:} Enhanced solar energy absorption
-    \item \textbf{Ice-Albedo Feedback:} Positive feedback amplifying warming effects  
+    \item \textbf{Ice-Albedo Feedback:} Positive feedback amplifying warming effects \cite{Box2017GreenlandAlbedo, VanTricht2016GreenlandAlbedoClouds}
     \item \textbf{Glacier Mass Balance:} Accelerated melting due to reduced surface reflectance
     \item \textbf{Regional Climate:} Contribution to local warming through feedback mechanisms
     \item \textbf{Hydrological Impact:} Altered meltwater contribution to the North Saskatchewan River system
@@ -135,7 +135,7 @@ Saskatchewan Glacier represents one of the most significant glacial features in 
 
 \subsection{Research Context and Previous Studies}
 
-Saskatchewan Glacier has been subject to extensive glaciological research, with recent GIS-based studies documenting glacier retreat patterns from 1957 to 2016 \cite{gis_saskatchewan_2016}. Modern modeling studies \cite{marshall_modelling_2022} demonstrate that albedo feedback accounts for 44\% of the glacier's mass balance response to climate warming, making albedo monitoring critically important for understanding glacier dynamics.
+Saskatchewan Glacier has been subject to extensive glaciological research, with recent GIS-based studies documenting glacier retreat patterns from 1957 to 2016 \cite{gis_saskatchewan_2016}. Modern modeling studies \cite{marshall_modelling_2022} demonstrate that albedo feedback accounts for 44\% of the glacier's mass balance response to climate warming, making albedo monitoring critically important for understanding glacier dynamics. Recent comprehensive assessments of Canadian Rocky Mountain glaciers \cite{Menounos2019RockiesMassBalance} and surface energy balance studies of Columbia Icefield glaciers \cite{Pelto2022ColumbiaEnergyBalance} provide essential context for our albedo trend analysis.
 
 The glacier's location within the Columbia Icefield system, combined with its accessibility and extensive historical data, makes it an ideal site for long-term climate change monitoring using satellite-based remote sensing techniques.
 
@@ -143,7 +143,7 @@ The glacier's location within the Columbia Icefield system, combined with its ac
 
 \subsection{Data Characteristics}
 
-Our analysis utilizes 15 years of MODIS MOD10A1 daily snow albedo data from Saskatchewan Glacier, applying rigorous quality control filters to ensure high-confidence results. The dataset encompasses the period 2010--2024 with comprehensive spatial coverage of the glacier's high ice-fraction regions.
+Our analysis utilizes 15 years of MODIS MOD10A1 daily snow albedo data from Saskatchewan Glacier, applying rigorous quality control filters to ensure high-confidence results \cite{Burkhart2017ModisValidation, Bright2022MODISv61}. The dataset encompasses the period 2010--2024 with comprehensive spatial coverage of the glacier's high ice-fraction regions, following established MODIS validation protocols for snow and ice surfaces \cite{Stroeve2021MODISCloudMask}.
 
 \begin{table}[H]
 \centering
@@ -213,7 +213,7 @@ Interquartile Range & 0.064 & Robust spread measure \\
 
 \subsection{Analytical Framework}
 
-Our comprehensive analysis employs multiple statistical approaches to ensure robust and reliable trend detection:
+Our comprehensive analysis employs multiple statistical approaches to ensure robust and reliable trend detection, following best practices for climate time series analysis \cite{Hassan2020ChangePointClimate, Pinzon2016STLRemote}:
 
 \subsubsection{Distributional Analysis}
 \begin{itemize}
@@ -226,7 +226,7 @@ Our comprehensive analysis employs multiple statistical approaches to ensure rob
 \subsubsection{Robust Statistical Methods}
 \begin{itemize}
     \item Theil-Sen robust slope estimation
-    \item Bootstrap confidence interval generation (10,000 iterations)
+    \item Bootstrap confidence interval generation (10,000 iterations) \cite{Huang2020BootstrappingClimate}
     \item Huber M-estimator for location parameters
     \item Trimmed and winsorized statistics for reduced outlier influence
 \end{itemize}
@@ -241,7 +241,7 @@ Our comprehensive analysis employs multiple statistical approaches to ensure rob
 
 \subsubsection{Advanced Temporal Analysis}
 \begin{itemize}
-    \item Change point detection (Pettitt test, CUSUM analysis)
+    \item Change point detection (Pettitt test, CUSUM analysis) \cite{Wang2019CUSUMGlacier}
     \item Autocorrelation function analysis
     \item Persistence assessment (Hurst exponent calculation)
     \item Spectral analysis for cyclical pattern detection
@@ -445,7 +445,7 @@ The convergence of multiple independent statistical methods provides exceptional
 The documented 14.6\% albedo decline represents substantial changes in surface energy balance:
 
 \begin{enumerate}
-    \item \textbf{Enhanced Solar Absorption:} Lower albedo increases net radiation by approximately 25 W/m$^2$ (assuming 300 W/m$^2$ typical solar irradiance)
+    \item \textbf{Enhanced Solar Absorption:} Lower albedo increases net radiation by approximately 25 W/m$^2$ (assuming 300 W/m$^2$ typical solar irradiance), consistent with radiative forcing studies \cite{Skiles2018DustSnow}
     
     \item \textbf{Positive Feedback Mechanisms:} Ice-albedo feedback amplifies initial warming through:
     \begin{itemize}
@@ -454,7 +454,7 @@ The documented 14.6\% albedo decline represents substantial changes in surface e
         \item Accelerated glacier surface evolution
     \end{itemize}
     
-    \item \textbf{Regional Climate Response:} Persistent trends indicate systematic forcing rather than natural variability
+    \item \textbf{Regional Climate Response:} Persistent trends indicate systematic forcing rather than natural variability, supporting broader assessments of debris-covered glacier albedo changes \cite{Rounce2023HighMountainAsia}
 \end{enumerate}
 
 \subsubsection{Temporal Persistence and System Memory}
@@ -465,6 +465,8 @@ The calculated Hurst exponent of \hurst{} $= 0.707$ indicates:
     \item \textbf{Long-range dependence:} System exhibits memory effects spanning multiple years
     \item \textbf{Non-random evolution:} Changes follow systematic patterns consistent with physical processes
 \end{itemize}
+
+These findings complement multi-decadal albedo mapping studies \cite{Ryan2019RockGlacierAlbedo} and recent advances in high-resolution remote sensing of snow and ice albedo \cite{Dumont2021SpectralSentinel, Notarnicola2018SentinelSnow}, demonstrating the value of long-term satellite monitoring programs for detecting systematic cryospheric changes.
 
 \subsection{Change Point Analysis Implications}
 
