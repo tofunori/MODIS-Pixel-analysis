@@ -1,0 +1,105 @@
+{
+  "analysis_metadata": {
+    "analysis_date": "2025-06-25 22:54:03",
+    "dataset_size": 15,
+    "time_period": "2010-2024",
+    "enhanced_methods_applied": [
+      "autocorrelation_correction",
+      "block_bootstrap",
+      "advanced_change_points",
+      "enhanced_diagnostics",
+      "seasonal_analysis"
+    ]
+  },
+  "key_findings": {
+    "autocorrelation": {
+      "lag1_autocorr": 0.4135,
+      "serial_correlation_detected": true,
+      "ljung_box_p_value": 0.017209
+    },
+    "trend_corrected_hr": {
+      "mann_kendall_corrected_p": 0.078888,
+      "variance_correction_factor": 2.1447,
+      "significant": false
+    },
+    "trend_gls": {
+      "gls_slope": -0.006747,
+      "gls_slope_p": 0.001959,
+      "gls_slope_ci": [
+        -0.010521,
+        -0.002974
+      ],
+      "significant": true
+    },
+    "bootstrap_slopes": {
+      "original_slope": -0.006744,
+      "moving_block_ci_95": [
+        -0.010202,
+        -0.001872
+      ],
+      "moving_block_mean": -0.006011,
+      "circular_block_ci_95": [
+        -0.009616,
+        -0.002439
+      ],
+      "circular_block_mean": -0.006579,
+      "stationary_ci_95": [
+        -0.009885,
+        -0.002501
+      ],
+      "stationary_mean": -0.006616
+    },
+    "change_points": {
+      "optimal_number_breaks": 1,
+      "break_years": [
+        2020
+      ],
+      "method": "Bai-Perron"
+    },
+    "model_assumptions": {
+      "normality": "normal",
+      "homoscedasticity": "homoscedastic",
+      "independence": "violated",
+      "linearity": "adequate",
+      "overall_adequacy": "good"
+    },
+    "seasonal_trends": {
+      "seasonal_mk_p_value": 0.126371,
+      "seasonal_mk_significant": false,
+      "trend_direction": "increasing"
+    }
+  },
+  "method_comparisons": {},
+  "reviewer_feedback_addressed": {
+    "independence_autocorrelation": {
+      "issue": "Standard p-values assume independent residuals",
+      "solution": "Applied Yue-Pilon pre-whitening, Hamed & Rao correction, and GLS with AR(1)",
+      "status": "addressed"
+    },
+    "bootstrap_details": {
+      "issue": "Bootstrap should preserve serial correlation structure",
+      "solution": "Implemented moving-block, circular-block, and stationary bootstrap methods",
+      "status": "addressed"
+    },
+    "change_point_analysis": {
+      "issue": "Pettitt test only finds single break; need multiple breaks with CIs",
+      "solution": "Added Bai-Perron multiple break test and segmented regression with confidence intervals",
+      "status": "addressed"
+    },
+    "small_sample_caveats": {
+      "issue": "Need acknowledgment of limitations with N=15",
+      "solution": "Added appropriate caveats for Hurst exponent and spectral analysis",
+      "status": "addressed"
+    },
+    "seasonality_consideration": {
+      "issue": "Annual aggregation may mask sub-annual processes",
+      "solution": "Added Seasonal Mann-Kendall test for monthly analysis",
+      "status": "addressed"
+    },
+    "residual_diagnostics": {
+      "issue": "Need homoscedasticity tests and normality of residuals",
+      "solution": "Added Breusch-Pagan, White tests, and comprehensive residual analysis",
+      "status": "addressed"
+    }
+  }
+}
